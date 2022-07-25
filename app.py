@@ -13,6 +13,11 @@ class Persona(BaseModel):
     hair_color: Optional[str] = None
     is_married: Optional[bool] = None
 
+class Locasion(BaseModel):
+    ciudad: str
+    estado: str
+    pais: str
+
 prefijo_api = 'api'
 
 @app.get("/")
@@ -59,3 +64,18 @@ def show_persona(
         )
 ):
     return {persona_id: 'siiiiiiiiiii'}
+
+@app.put("/persona/{persona_id}")
+def update_persona(
+    persona_id: int = Path(
+        ...,
+        title="persona ID",
+        description="id de una persona",
+        gt=0
+    ),
+    persona: Persona = Body(...),
+    locasion: Locasion = Body(...)
+):
+    resultado = persona.dict()
+    resultado.update(locasion.dict())
+    return resultado
